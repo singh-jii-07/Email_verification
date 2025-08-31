@@ -1,4 +1,5 @@
 import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
 import User from "../Models/Usermodel.js";
 
 const register = async (req, res) => {
@@ -47,9 +48,7 @@ const register = async (req, res) => {
     });
   }
 };
-import bcrypt from "bcryptjs";
-import jwt from "jsonwebtoken";
-import User from "../Models/Usermodel.js";
+
 
 const login = async (req, res) => {
   try {
