@@ -155,7 +155,7 @@ const login = async (req, res) => {
     }
 
     
-    await Session.deleteOne({ userId });
+    await session.deleteOne({ userId });
 
     
     await User.findByIdAndUpdate(userId, { isLoggedIn: false });
