@@ -8,18 +8,18 @@
     }
   });
 
-  export const sendStudentMail = async (token,newUser) => {
+  export const sendStudentMail = async (newUser) => {
     try {
       await transporter.sendMail({
-        from: `"NK School" <nileshkumarsingh060@gmail.com>`,
+        from: `"Verifymail" <nileshkumarsingh060@gmail.com>`,
         to: newUser.email,
         subject: "Email Registration Successful ",
         html: `
           <h2>Welcome, ${newUser.username}!</h2>
           <p>Your student profile has been successfully created.</p>
           <p><b>Email:</b> ${newUser.email}</p>
-          <p><b>Phone:</b> ${newUser.phone}</p>
-          <p><b>Password:</b> ${token}</p>
+          
+          <p><b>Password:</b> ${newUser.token}</p>
           <p>Thank you for registering with us!</p>
         `
       });

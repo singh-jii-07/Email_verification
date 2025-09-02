@@ -40,7 +40,9 @@ const register = async (req, res) => {
       { expiresIn: "1h" }
     );
 
-    sendStudentMail(token,newUser)
+    newUser.token=token;
+    await newUser.save()
+    sendStudentMail(newUser)
     return res.status(201).json({
       message: "User registered successfully",
       token
