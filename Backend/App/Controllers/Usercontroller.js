@@ -209,4 +209,46 @@ const forgotPassword = async (req, res) => {
 });
 }
 };
-export { register, login, Verification,Logout,forgotPassword };
+
+const verifyOtp = async (req, res) => {
+  try {
+    const { email, otp } = req.body;
+
+    
+    if (!email || !otp) {
+      return res.status(400).json({ message: "Email and OTP are required" });
+    }
+
+    
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+  
+    if (!user.otp || !user.otpExpiry) {
+      return res.status(400).json({ message: "OTP not generated. Please request again." });
+    }
+
+    
+    if (user.otpExpiry < Date.now()) {
+      return res.status(400).json({ message: "OTP expired. Please request a new one." });
+    }
+
+    
+    if (user.otp !== otp) {
+      return res.status(400).json({ message: "Invalid OTP. Please try again." });
+    }
+
+    
+    user.isVerified = true;
+    user.otp = null; 
+    user.otpExpiry = null;
+    await user.save();
+
+    return res.status(200).json({ message: "OTP verified successfully " });
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+export { register, login, Verification,Logout,forgotPassword,verifyOtp };
