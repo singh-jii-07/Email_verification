@@ -1,5 +1,6 @@
 import nodemailer from "nodemailer";
 
+
 const transporter = nodemailer.createTransport({
   service: "gmail",
   auth: {
@@ -8,43 +9,36 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-export const sendStudentMail = async (newUser) => {
-  try {
-    const verifyUrl = `http://localhost:4050/api/users/verify/${newUser.token}`; 
-  
 
+export const sendOtpMail = async (newUser, otp) => {
+  try {
     await transporter.sendMail({
       from: `"NKPR Verification" <nileshkumarsingh060@gmail.com>`,
       to: newUser.email,
-      subject: "Verify Your Email - NKPR",
+      subject: "Your OTP for Email Verification - NKPR",
       html: `
         <div style="font-family: Arial, sans-serif; background: #f4f7fb; padding: 20px;">
           <div style="max-width: 600px; margin: auto; background: #ffffff; border-radius: 10px; overflow: hidden; box-shadow: 0px 4px 10px rgba(0,0,0,0.1);">
             
             <!-- Header -->
             <div style="background: linear-gradient(90deg, #5364FF, #00F1FF); color: white; padding: 20px; text-align: center;">
-              <h1 style="margin: 0;">Welcome to NKPR</h1>
+              <h1 style="margin: 0;">NKPR Verification</h1>
             </div>
 
             <!-- Body -->
             <div style="padding: 30px; text-align: left; color: #333;">
-              <h2>Hello, ${newUser.username}</h2>
-              <p>Thank you for registering with us. Please find your details below:</p>
+              <h2>Hello, ${newUser.username} 👋</h2>
+              <p>We received a request to verify your email address. Use the OTP below to complete your verification:</p>
               
-              <p><b>Name:</b> ${newUser.username}</p>
-              <p><b>Email:</b> ${newUser.email}</p>
-              <p><b>Token:</b> <span style="color: #5364FF; font-weight: bold;">${newUser.token}</span></p>
-
-              <p style="margin-top: 20px;">Click the button below to verify your account:</p>
-              
+              <!-- OTP -->
               <div style="text-align: center; margin: 30px 0;">
-                <a href="${verifyUrl}" 
-                   style="background: #5364FF; color: white; text-decoration: none; padding: 12px 25px; border-radius: 30px; font-size: 16px; font-weight: bold; display: inline-block;">
-                    Verify Account
-                </a>
+                <span style="font-size: 28px; font-weight: bold; letter-spacing: 5px; background: #f4f7fb; padding: 12px 25px; border-radius: 8px; border: 2px dashed #5364FF; display: inline-block;">
+                  ${newUser.otp}
+                </span>
               </div>
 
-              <p>If you did not create this account, please ignore this email.</p>
+              <p>This OTP is valid for <b>10 minutes</b>. Do not share it with anyone for security reasons.</p>
+              <p>If you did not request this, please ignore this email.</p>
             </div>
 
             <!-- Footer -->
@@ -56,8 +50,8 @@ export const sendStudentMail = async (newUser) => {
       `,
     });
 
-    console.log("Verification email sent successfully");
+    console.log("OTP email sent successfully ✅");
   } catch (err) {
-    console.error("Error sending email:", err);
+    console.error("Error sending OTP email:", err);
   }
 };
