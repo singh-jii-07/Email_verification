@@ -121,9 +121,12 @@ const login = async (req, res) => {
    
     const existingSession = await session.findOne({ userId: user._id });
     if (existingSession) {
-      await session.deleteOne({ userId: user._id });
+      await session.delete({ userId: user._id });
     }
-    await session.create({ userId: user._id });
+       await session.create({
+      userId: user._id,
+      userName: user.username || user.name, 
+    });
 
    
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
