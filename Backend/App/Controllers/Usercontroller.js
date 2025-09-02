@@ -1,20 +1,19 @@
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import User from "../Models/Usermodel.js";
-import { sendStudentMail } from '../EmailVerify/Verify.js'
+import { sendStudentMail } from "../EmailVerify/Verify.js";
+import session from "../Models/SessionModel.js";
 
 const register = async (req, res) => {
   try {
     const { username, email, password } = req.body;
 
-   
     if (!username || !email || !password) {
       return res.status(400).json({
         message: "All fields are required",
       });
     }
 
- 
     const userExisting = await User.findOne({ email });
     if (userExisting) {
       return res.status(400).json({
@@ -22,9 +21,7 @@ const register = async (req, res) => {
       });
     }
 
- 
     const hashedPassword = await bcrypt.hash(password, 10);
-
 
     const newUser = new User({
       username,
@@ -34,18 +31,16 @@ const register = async (req, res) => {
 
     await newUser.save();
 
-    const token = jwt.sign(
-      { id: newUser._id },
-      process.env.JWT_SECRET,
-      { expiresIn: "1h" }
-    );
+    const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, {
+      expiresIn: "1h",
+    });
 
-    newUser.token=token;
-    await newUser.save()
-    sendStudentMail(newUser)
+    newUser.token = token;
+    await newUser.save();
+    sendStudentMail(newUser);
     return res.status(201).json({
       message: "User registered successfully",
-      token
+      token,
     });
   } catch (error) {
     return res.status(500).json({
@@ -55,53 +50,98 @@ const register = async (req, res) => {
 };
 
 
+const Verification = async (req, res) => {
+  try {
+    const authHeader = req.headers.authorization;
+
+    if (!authHeader || !authHeader.startsWith("Bearer ")) {
+      return res.status(401).json({
+        message: "Authorization token is missing or invalid",
+      });
+    }
+
+    const token = authHeader.split(" ")[1];
+    let decode;
+
+    try {
+      decode = jwt.verify(token, process.env.JWT_SECRET);
+    } catch (error) {
+      return res.status(401).json({
+        message: "Invalid or expired token",
+        error: error.message,
+      });
+    }
+
+    const user = await User.findById(decode.id);
+    if (!user) {
+      return res.status(404).json({
+        message: "User not found",
+      });
+    }
+
+    user.isVerified = true;
+    user.token = null;
+    await user.save();
+
+    res.status(200).json({
+      message: "User verified successfully",
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: error.message,
+    });
+  }
+};
 const login = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-  
+ 
     if (!email || !password) {
-      return res.status(400).json({
-        message: "Email and password are required",
-      });
+      return res.status(400).json({ message: "Email and password are required" });
     }
 
-   
+
     const user = await User.findOne({ email });
     if (!user) {
-      return res.status(400).json({
-        message: "Invalid email or password",
-      });
+      return res.status(401).json({ message: "Invalid email or password" });
     }
 
    
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
-      return res.status(400).json({
-        message: "Invalid email or password",
-      });
+      return res.status(401).json({ message: "Invalid email or password" });
+    }
+
+ 
+    if (!user.isVerified) {
+      return res.status(403).json({ message: "User is not verified" });
     }
 
    
-    const token = jwt.sign(
-      { id: user._id }, 
-      process.env.JWT_SECRET,              
-      { expiresIn: "1h" }                 
-    );
+    const existingSession = await Session.findOne({ userId: user._id });
+    if (existingSession) {
+      await Session.deleteOne({ userId: user._id });
+    }
+    await Session.create({ userId: user._id });
 
    
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+      expiresIn: "1h",
+    });
+
+   
+    user.isLoggedIn = true;
+    await user.save();
+
     return res.status(200).json({
       message: "Login successful",
       token,
-      
+      user
     });
   } catch (error) {
-    return res.status(500).json({
-      message: error.message,
-    });
+    return res.status(500).json({ message: error.message });
   }
 };
 
-
-
-export { register,login}
+export { register, login, Verification };
