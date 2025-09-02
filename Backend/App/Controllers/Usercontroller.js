@@ -146,18 +146,26 @@ const login = async (req, res) => {
     return res.status(500).json({ message: error.message });
   }
 };
- const Logout =async(req,res)=>{
-  try{
-     const user =req.UserId
-     await session.deleteMany({user})
-     await User.findByIdAndUpdate(user,{isLoggedIn:false})
-     res.status(200).json({
-      message:"user logout ",
-      user
-     })
-  }
- catch (error) {
+ const Logout = async (req, res) => {
+  try {
+    const userId = req.userId; 
+
+    if (!userId) {
+      return res.status(400).json({ message: "User not found in request" });
+    }
+
+    
+    await Session.deleteOne({ userId });
+
+    
+    await User.findByIdAndUpdate(userId, { isLoggedIn: false });
+
+    res.status(200).json({
+      message: "User logged out successfully",
+      userId,
+    });
+  } catch (error) {
     return res.status(500).json({ message: error.message });
   }
- }
+};
 export { register, login, Verification,Logout };
