@@ -146,5 +146,18 @@ const login = async (req, res) => {
     return res.status(500).json({ message: error.message });
   }
 };
-
-export { register, login, Verification };
+ const Logout =async(req,res)=>{
+  try{
+     const user =req.UserId
+     await session.deleteMany({user})
+     await User.findByIdAndUpdate(user,{isLoggedIn:false})
+     res.status(200).json({
+      message:"user logout ",
+      user
+     })
+  }
+ catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+ }
+export { register, login, Verification,Logout };
