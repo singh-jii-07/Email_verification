@@ -5,6 +5,10 @@ const sessionschema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
   },
+  userName:{
+    type:mongoose.Schema.Types.ObjectId,
+    ref:"User"
+  }
 });
 
 const session = mongoose.model("Session", sessionschema);

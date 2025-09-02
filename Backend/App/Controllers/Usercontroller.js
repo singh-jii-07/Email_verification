@@ -119,11 +119,11 @@ const login = async (req, res) => {
     }
 
    
-    const existingSession = await Session.findOne({ userId: user._id });
+    const existingSession = await session.findOne({ userId: user._id });
     if (existingSession) {
-      await Session.deleteOne({ userId: user._id });
+      await session.deleteOne({ userId: user._id });
     }
-    await Session.create({ userId: user._id });
+    await session.create({ userId: user._id });
 
    
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
