@@ -1,6 +1,7 @@
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import User from "../Models/Usermodel.js";
+import { sendStudentMail } from '../EmailVerify/Verify.js'
 
 const register = async (req, res) => {
   try {
@@ -38,6 +39,8 @@ const register = async (req, res) => {
       process.env.JWT_SECRET,
       { expiresIn: "1h" }
     );
+
+    sendStudentMail(token,newUser)
     return res.status(201).json({
       message: "User registered successfully",
       token
