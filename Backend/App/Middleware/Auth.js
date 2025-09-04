@@ -27,7 +27,7 @@ const auth = async (req, res, next) => {
 
     
     req.userId = user._id;
-
+    req.user = user;
     next();
   } catch (error) {
     return res.status(401).json({
