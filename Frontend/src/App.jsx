@@ -4,6 +4,7 @@ import Signup from "./Pages/Signup";
 import Home from "./Pages/Home";
 import Navbar from "./Components/Navabar/Navbar";
 import VerifyEmail from './Pages/VerifyEmail'
+import CheckMail from "./Pages/CheckMail ";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 export default function App() {
@@ -37,7 +38,12 @@ export default function App() {
     },
     {
     path:"/verify/:token",
-     element:<VerifyEmail />}
+     element:<VerifyEmail />
+    },
+    {
+    path:"/checkmail",
+     element:<CheckMail  />
+    }
   ]);
 
   return <RouterProvider router={router} />;

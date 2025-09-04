@@ -5,37 +5,32 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const VerifyEmail = () => {
-  const { token } = useParams(); 
+  const { token } = useParams(); // get token from URL
   const [status, setStatus] = useState("loading");
   const navigate = useNavigate();
 
   useEffect(() => {
     const verifyUser = async () => {
       try {
-        const res = await axios.get(`http://localhost:4050/api/users/verify`, {
+        const res = await axios.get("http://localhost:4050/api/users/verify", {
           headers: {
-            Authorization: `Bearer ${token}`, 
+            Authorization: `Bearer ${token}`, // ✅ pass token in headers
           },
         });
 
-        toast.success(res.data.message || "Email verified successfully!", {
+        toast.success(res.data.message || "✅ Email verified!", {
           position: "top-right",
           autoClose: 2000,
         });
-
         setStatus("success");
 
-        
-        navigate("/login");
+        setTimeout(() => navigate("/login"), 2500);
       } catch (error) {
         console.error(error);
-        toast.error(
-          error.response?.data?.message || " Verification failed!",
-          {
-            position: "top-right",
-            autoClose: 3000,
-          }
-        );
+        toast.error(error.response?.data?.message || "❌ Verification failed!", {
+          position: "top-right",
+          autoClose: 3000,
+        });
         setStatus("failed");
       }
     };
@@ -55,11 +50,11 @@ const VerifyEmail = () => {
         )}
 
         {status === "success" && (
-          <p className="text-green-300 text-lg"> Your email is verified!</p>
+          <p className="text-green-300 text-lg">🎉 Your email is verified!</p>
         )}
 
         {status === "failed" && (
-          <p className="text-red-300 text-lg"> Verification failed!</p>
+          <p className="text-red-300 text-lg">❌ Verification failed!</p>
         )}
 
         <div className="mt-6">
@@ -71,7 +66,6 @@ const VerifyEmail = () => {
           </Link>
         </div>
       </div>
-
       <ToastContainer />
     </div>
   );

@@ -33,7 +33,7 @@ const Signup = () => {
 
       setFormData({ username: "", email: "", password: "" });
 
-     navigate("/verify/:token");
+     navigate("/checkmail");
     } catch (error) {
       console.log(error);
       toast.error(error.response?.data?.message || " Something went wrong!", {
