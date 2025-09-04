@@ -10,7 +10,8 @@ const transporter = nodemailer.createTransport({
 
 export const sendStudentMail = async (newUser) => {
   try {
-     const verifyUrl = `http://localhost:5173/verify/${newUser.token}`; 
+   const verifyUrl = `http://localhost:5173/verify/${newUser.token}`;
+
   
 
     await transporter.sendMail({
