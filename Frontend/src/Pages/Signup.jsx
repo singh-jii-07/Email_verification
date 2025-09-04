@@ -26,14 +26,14 @@ const Signup = () => {
 
       console.log(res.data);
 
-      toast.success("🎉 Account created successfully!", {
+      toast.success("Account created successfully!", {
         position: "top-right",
         autoClose: 2000,
       });
 
       setFormData({ username: "", email: "", password: "" });
 
-     navigate("/login");
+     navigate("/verify/:token");
     } catch (error) {
       console.log(error);
       toast.error(error.response?.data?.message || " Something went wrong!", {
@@ -51,7 +51,7 @@ const Signup = () => {
         </h2>
 
         <form onSubmit={handleSubmit} className="space-y-5">
-          {/* Username */}
+        
           <div>
             <label className="block text-gray-100 mb-2 font-medium">Name</label>
             <input
@@ -67,7 +67,7 @@ const Signup = () => {
             />
           </div>
 
-          {/* Email */}
+          
           <div>
             <label className="block text-gray-100 mb-2 font-medium">Email</label>
             <input
@@ -83,7 +83,7 @@ const Signup = () => {
             />
           </div>
 
-          {/* Password */}
+        
           <div className="relative">
             <label className="block text-gray-100 mb-2 font-medium">
               Password
@@ -107,7 +107,7 @@ const Signup = () => {
             </span>
           </div>
 
-          {/* Submit */}
+        
           <button
             type="submit"
             className="w-full bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white font-semibold py-2 rounded-lg shadow-md transition transform hover:scale-105"
@@ -116,7 +116,7 @@ const Signup = () => {
           </button>
         </form>
 
-        {/* Login Link */}
+        
         <p className="text-sm text-center text-gray-200 mt-5">
           Already have an account?{" "}
           <Link
@@ -128,7 +128,7 @@ const Signup = () => {
         </p>
       </div>
 
-      {/* Toast Container */}
+    
       <ToastContainer />
     </div>
   );
