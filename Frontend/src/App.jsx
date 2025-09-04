@@ -1,10 +1,40 @@
-
-import './App.css'
+import "./App.css";
+import Login from "./Pages/Login";
+import Signup from "./Pages/Signup";
+import Home from "./Pages/Home";
+import Navbar from "./Components/Navabar/Navbar";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 export default function App() {
-  return (
-    <h1 className="text-3xl font-bold underline">
-      Hello world!
-    </h1>
-  )
+  const router = createBrowserRouter([
+    {
+      path: "/",
+      element: (
+        <div>
+          <Navbar />
+          <Home />
+        </div>
+      ),
+    },
+    {
+      path: "/login",
+      element: (
+        <div>
+          <Navbar />
+          <Login />
+        </div>
+      ),
+    },
+    {
+      path: "/signup",
+      element: (
+        <div>
+          <Navbar />
+          <Signup />
+        </div>
+      ),
+    },
+  ]);
+
+  return <RouterProvider router={router} />;
 }
