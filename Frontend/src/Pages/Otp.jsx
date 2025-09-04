@@ -1,32 +1,32 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import {  useNavigate } from "react-router-dom";
 
-const Forgot= () => {
-  const [email, setEmail] = useState("");
+const Otp = () => {
+  const [formData, setFormData] = useState({ email: "", otp: "" });
   const [loading, setLoading] = useState(false);
- const navigate = useNavigate();
+  const navigate = useNavigate();
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
 
     try {
-      const res = await axios.post("http://localhost:4050/api/users/forgot",
-        email
-      );
+      const res = await axios.post("http://localhost:4050/api/users/otp", formData);
 
-      toast.success(res.data.message || "OTP sent to your email!", {
+      toast.success(res.data.message || "OTP verified successfully!", {
         position: "top-right",
         autoClose: 3000,
       });
-     
-      setEmail("");
-      navigate ("/otp")
 
+      setFormData({ email: "", otp: "" });
+
+    
+      setTimeout(() => navigate("/login"), 2500);
     } catch (error) {
-      toast.error(error.response?.data?.message || "Something went wrong!", {
+      toast.error(error.response?.data?.message || "Verification failed!", {
         position: "top-right",
         autoClose: 3000,
       });
@@ -38,9 +38,9 @@ const Forgot= () => {
   return (
     <div className="flex justify-center items-center min-h-screen bg-gradient-to-br from-purple-500 via-indigo-600 to-blue-500 px-4">
       <div className="bg-white/20 backdrop-blur-lg shadow-xl rounded-2xl p-8 w-full max-w-md text-center border border-white/30">
-        <h2 className="text-3xl font-bold text-white mb-6">Forgot Password</h2>
+        <h2 className="text-3xl font-bold text-white mb-6">Verify OTP</h2>
         <p className="text-gray-200 mb-6">
-          Enter your email and we’ll send you an OTP to reset your password.
+          Enter your email and the OTP sent to your email to verify your account.
         </p>
 
         <form onSubmit={handleSubmit} className="space-y-5">
@@ -49,8 +49,20 @@ const Forgot= () => {
             <input
               type="email"
               placeholder="Enter your email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              value={formData.email}
+              onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+              required
+              className="w-full px-4 py-2 rounded-lg border border-gray-300 bg-white/80 text-gray-800 placeholder-gray-500 focus:ring-2 focus:ring-indigo-400 outline-none transition"
+            />
+          </div>
+
+          <div>
+            <label className="block text-gray-100 mb-2 font-medium">OTP</label>
+            <input
+              type="text"
+              placeholder="Enter OTP"
+              value={formData.otp}
+              onChange={(e) => setFormData({ ...formData, otp: e.target.value })}
               required
               className="w-full px-4 py-2 rounded-lg border border-gray-300 bg-white/80 text-gray-800 placeholder-gray-500 focus:ring-2 focus:ring-indigo-400 outline-none transition"
             />
@@ -63,7 +75,7 @@ const Forgot= () => {
               loading ? "opacity-50 cursor-not-allowed" : "hover:from-indigo-600 hover:to-purple-700"
             }`}
           >
-            {loading ? "Sending OTP..." : "Send OTP"}
+            {loading ? "Verifying OTP..." : "Verify OTP"}
           </button>
         </form>
       </div>
@@ -73,4 +85,4 @@ const Forgot= () => {
   );
 };
 
-export default Forgot
+export default Otp;

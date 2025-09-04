@@ -6,6 +6,7 @@ import Navbar from "./Components/Navabar/Navbar";
 import VerifyEmail from './Pages/VerifyEmail'
 import CheckMail from "./Pages/CheckMail ";
 import Forgot from "./Pages/Forgot";
+import Otp from './Pages/Otp'
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 export default function App() {
@@ -48,6 +49,10 @@ export default function App() {
     {
     path:"/forgot-password",
      element:<Forgot  />
+    },
+    {
+    path:"/otp",
+     element:<Otp/>
     }
   ]);
 
