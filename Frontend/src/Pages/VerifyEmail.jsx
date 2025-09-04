@@ -12,16 +12,21 @@ const VerifyEmail = () => {
   useEffect(() => {
     const verifyUser = async () => {
       try {
-        const res = await axios.post("http://localhost:4050/api/users/verify",{}, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const res = await axios.post(
+          "http://localhost:4050/api/users/verify",
+          {},
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
 
         toast.success(res.data.message || "Email verified!", {
           position: "top-right",
           autoClose: 2000,
         });
+
         setStatus("success");
 
         setTimeout(() => navigate("/login"), 2500);
@@ -47,26 +52,27 @@ const VerifyEmail = () => {
 
         {status === "loading" && (
           <p className="text-yellow-200 text-base sm:text-lg animate-pulse">
-             Verifying your email...
+            Verifying your email...
           </p>
         )}
 
         {status === "success" && (
           <p className="text-green-300 text-base sm:text-lg">
-             Your email is verified!
+            Email verified successfully!
           </p>
         )}
 
         {status === "failed" && (
           <p className="text-red-300 text-base sm:text-lg">
-             Verification failed!
+            Verification failed!
           </p>
         )}
 
         <div className="mt-5 sm:mt-6">
           <Link
-            to="/login"
-            className="block w-full sm:w-auto px-5 py-2 bg-indigo-500 hover:bg-indigo-600 text-white rounded-lg shadow-md transition mx-auto"
+            to={status === "loading" ? "#" : "/login"}
+            className={`block w-full sm:w-auto px-5 py-2 text-white rounded-lg shadow-md transition mx-auto
+              ${status === "loading" ? "bg-gray-400 cursor-not-allowed" : "bg-indigo-500 hover:bg-indigo-600"}`}
           >
             Go to Login
           </Link>

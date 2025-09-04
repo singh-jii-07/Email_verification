@@ -33,7 +33,7 @@ const register = async (req, res) => {
     await newUser.save();
 
     const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, {
-      expiresIn: "1h",
+      expiresIn: "7d",
     });
 
     newUser.token = token;
@@ -56,41 +56,34 @@ const Verification = async (req, res) => {
     const authHeader = req.headers.authorization;
 
     if (!authHeader || !authHeader.startsWith("Bearer ")) {
-      return res.status(401).json({
-        message: "Authorization token is missing or invalid",
-      });
+      return res.status(401).json({ message: "Authorization token is missing or invalid" });
     }
 
     const token = authHeader.split(" ")[1];
-    let decode;
+    let decoded;
 
     try {
-      decode = jwt.verify(token, process.env.JWT_SECRET);
+      decoded = jwt.verify(token, process.env.JWT_SECRET);
     } catch (error) {
-      return res.status(401).json({
-        message: "Invalid or expired token",
-        error: error.message,
-      });
+      return res.status(401).json({ message: "Invalid or expired token", error: error.message });
     }
 
-    const user = await User.findById(decode.id);
+    const user = await User.findById(decoded.id);
     if (!user) {
-      return res.status(404).json({
-        message: "User not found",
-      });
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    if (user.isVerified) {
+      return res.status(200).json({ message: "User already verified" });
     }
 
     user.isVerified = true;
-    user.token = null;
+    if (user.token) user.token = null;
     await user.save();
 
-    res.status(200).json({
-      message: "User verified successfully",
-    });
+    res.status(200).json({ message: "User verified successfully" });
   } catch (error) {
-    return res.status(500).json({
-      message: error.message,
-    });
+    res.status(500).json({ message: error.message });
   }
 };
 const login = async (req, res) => {
@@ -131,7 +124,7 @@ const login = async (req, res) => {
 
    
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
-      expiresIn: "1h",
+      expiresIn: "7d",
     });
 
    
