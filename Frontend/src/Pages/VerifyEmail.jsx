@@ -12,7 +12,7 @@ const VerifyEmail = () => {
   useEffect(() => {
     const verifyUser = async () => {
       try {
-        const res = await axios.get("http://localhost:4050/api/users/verify", {
+        const res = await axios.post("http://localhost:4050/api/users/verify",{}, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
