@@ -17,19 +17,19 @@ const Login = () => {
     e.preventDefault();
 
     try {
-      const res = await axios.post("http://localhost:4050/api/users/login", formData);
+      const res = await axios.post(
+        "http://localhost:4050/api/users/login",
+        formData
+      );
 
       toast.success(res.data.message || "Login successful!", {
         position: "top-right",
         autoClose: 2000,
       });
 
-   
       localStorage.setItem("token", res.data.token);
-     
 
-      
-      navigate("/")
+      navigate("/");
     } catch (error) {
       console.error(error);
       toast.error(error.response?.data?.message || "Login failed!", {
@@ -47,29 +47,35 @@ const Login = () => {
         </h2>
 
         <form onSubmit={handleSubmit} className="space-y-5">
-         
           <div>
-            <label className="block text-gray-100 mb-2 font-medium">Email</label>
+            <label className="block text-gray-100 mb-2 font-medium">
+              Email
+            </label>
             <input
               type="email"
               name="email"
               placeholder="Enter your email"
               value={formData.email}
-              onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, email: e.target.value })
+              }
               required
               className="w-full px-4 py-2 rounded-lg border border-gray-300 bg-white/80 text-gray-800 placeholder-gray-500 focus:ring-2 focus:ring-indigo-400 outline-none transition"
             />
           </div>
 
-          
           <div className="relative">
-            <label className="block text-gray-100 mb-2 font-medium">Password</label>
+            <label className="block text-gray-100 mb-2 font-medium">
+              Password
+            </label>
             <input
               type={showPassword ? "text" : "password"}
               name="password"
               placeholder="Enter your password"
               value={formData.password}
-              onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, password: e.target.value })
+              }
               required
               className="w-full px-4 py-2 pr-10 rounded-lg border border-gray-300 bg-white/80 text-gray-800 placeholder-gray-500 focus:ring-2 focus:ring-indigo-400 outline-none transition"
             />
@@ -80,8 +86,15 @@ const Login = () => {
               {showPassword ? <FaEyeSlash /> : <FaEye />}
             </span>
           </div>
+          <p className="text-sm text-center text-gray-200 mt-3">
+            <Link
+              to="/forgot-password"
+              className="text-yellow-300 font-medium hover:underline"
+            >
+              Forgot Password?
+            </Link>
+          </p>
 
-          
           <button
             type="submit"
             className="w-full bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white font-semibold py-2 rounded-lg shadow-md transition transform hover:scale-105"
@@ -90,10 +103,12 @@ const Login = () => {
           </button>
         </form>
 
-       
         <p className="text-sm text-center text-gray-200 mt-5">
           Don’t have an account?{" "}
-          <Link to="/signup" className="text-yellow-300 font-medium hover:underline">
+          <Link
+            to="/signup"
+            className="text-yellow-300 font-medium hover:underline"
+          >
             Sign Up
           </Link>
         </p>
