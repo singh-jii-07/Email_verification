@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 const CheckMail = () => {
+  const token= localStorage.getItem("token")
   return (
     <div className="flex justify-center items-center min-h-screen bg-gradient-to-br from-blue-500 via-indigo-600 to-purple-700">
       <div className="bg-white/20 backdrop-blur-lg shadow-xl rounded-2xl p-8 w-full max-w-md text-center border border-white/30">
@@ -13,7 +14,14 @@ const CheckMail = () => {
           Please check your inbox (and spam folder) to verify your account.
         </p>
 
-        
+        {token && (
+          <Link
+            to={`/verify/${token}`}
+            className="inline-block px-6 py-2 bg-indigo-500 hover:bg-indigo-600 text-white font-semibold rounded-lg shadow-md transition"
+          >
+            Go to Verify Page
+          </Link>
+        )}
       </div>
     </div>
   );

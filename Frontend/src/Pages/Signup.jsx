@@ -25,7 +25,8 @@ const Signup = () => {
       );
 
       console.log(res.data);
-
+      console.log(res.data.token)
+      localStorage.setItem("token", res.data.token);
       toast.success("Account created successfully!", {
         position: "top-right",
         autoClose: 2000,
