@@ -122,7 +122,7 @@ const login = async (req, res) => {
    
     const existingSession = await session.findOne({ userId: user._id });
     if (existingSession) {
-      await session.delete({ userId: user._id });
+      await session.deleteOne({ userId: user._id });
     }
        await session.create({
       userId: user._id,
@@ -266,7 +266,7 @@ const changePassword =async(req,res)=>{
     }
 
   
-    const user = await User.findone({email});
+    const user = await User.findOne({email});
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
