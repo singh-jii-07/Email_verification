@@ -251,4 +251,41 @@ const verifyOtp = async (req, res) => {
     return res.status(500).json({ message: error.message });
   }
 };
-export { register, login, Verification,Logout,forgotPassword,verifyOtp };
+const changePassword =async(req,res)=>{
+  try {
+    const email=req.params.email
+    const {  newPassword, confirmPassword } = req.body;
+
+  
+    if (!newPassword || !confirmPassword) {
+      return res.status(400).json({ message: "All fields are required" });
+    }
+
+    if (newPassword !== confirmPassword) {
+      return res.status(400).json({ message: "New password and confirm password do not match" });
+    }
+
+  
+    const user = await User.findone({email});
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+   
+    
+
+  
+  
+    user.password = await bcrypt.hash(newPassword, 10);
+
+    await user.save();
+
+    res.status(200).json({ message: "Password changed successfully" });
+
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+
+
+}
+export { register, login, Verification,Logout,forgotPassword,verifyOtp ,changePassword};
