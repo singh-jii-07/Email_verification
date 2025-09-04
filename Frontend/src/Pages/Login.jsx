@@ -28,8 +28,9 @@ const Login = () => {
       });
 
       localStorage.setItem("token", res.data.token);
+      localStorage.setItem("userId",res.data.user._id)
 
-      navigate("/");
+      navigate("/home");
     } catch (error) {
       console.error(error);
       toast.error(error.response?.data?.message || "Login failed!", {
@@ -106,7 +107,7 @@ const Login = () => {
         <p className="text-sm text-center text-gray-200 mt-5">
           Don’t have an account?{" "}
           <Link
-            to="/signup"
+            to="/"
             className="text-yellow-300 font-medium hover:underline"
           >
             Sign Up

@@ -281,4 +281,21 @@ const changePassword =async(req,res)=>{
 
 
 }
-export { register, login, Verification,Logout,forgotPassword,verifyOtp ,changePassword};
+const profile =async (req,res)=>{
+  try {
+    const user = req.user;
+
+    res.status(200).json({
+      user: {
+        username: user.username,
+        email: user.email,
+        isVerified: user.isVerified,
+        isLoggedIn: user.isLoggedIn,
+      },
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+export { register, login, Verification,Logout,forgotPassword,verifyOtp ,changePassword,profile};

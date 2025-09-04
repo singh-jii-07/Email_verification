@@ -7,12 +7,13 @@ import VerifyEmail from './Pages/VerifyEmail'
 import CheckMail from "./Pages/CheckMail ";
 import Forgot from "./Pages/Forgot";
 import Otp from './Pages/Otp'
+import ChangePassword from "./Pages/ChangePassword"; 
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 export default function App() {
   const router = createBrowserRouter([
     {
-      path: "/",
+      path: "/home",
       element: (
         <div>
           <Navbar />
@@ -30,7 +31,7 @@ export default function App() {
       ),
     },
     {
-      path: "/signup",
+      path: "/",
       element: (
         <div>
           <Navbar />
@@ -53,7 +54,11 @@ export default function App() {
     {
     path:"/otp",
      element:<Otp/>
-    }
+    },
+    {
+    path:"/ChangePassword/:email",
+     element:<ChangePassword/>
+    },
   ]);
 
   return <RouterProvider router={router} />;

@@ -1,9 +1,9 @@
 import React from 'react'
-
+import Profile from '../Components/Profil'
 const Home = () => {
   return (
     <div>
-      Home page
+<Profile/>
     </div>
   )
 }

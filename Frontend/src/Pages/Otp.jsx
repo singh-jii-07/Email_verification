@@ -24,7 +24,7 @@ const Otp = () => {
       setFormData({ email: "", otp: "" });
 
     
-      setTimeout(() => navigate("/login"), 2500);
+      setTimeout(() => navigate("/ChangePassword/:email"), 2500);
     } catch (error) {
       toast.error(error.response?.data?.message || "Verification failed!", {
         position: "top-right",
